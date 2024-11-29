@@ -15,11 +15,11 @@ const connection = mysql.createConnection({
 })
 
 app.get('/', async (request, response) => {
-    response.send('running');
+    response.send('running')
 })
 
 app.get('/getRecipes', async (request, response) => {
-    const db = await connection;
+    const db = await connection
     const recipes = await db.query('SELECT * FROM `recipes` WHERE `id` < 100')
     response.json(recipes)
 })
@@ -56,6 +56,34 @@ app.get('/getFormResults', async (request, response) => {
     response.json({
         results
     })
+})
+
+app.post('/register', async (req, res) => {
+    const { emailReg, passwordReg } = req.body;
+    const db = await connection;
+
+    try {
+        await db.query('INSERT INTO `users` (email, password) VALUES (?, ?)', [emailReg, passwordReg]);
+        res.status(200).send('User registered successfully');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error registering user');
+    }
+});
+
+app.post('/login', async (req, res) => {
+        const { email, password } = req.body;
+        const db = await connection;
+        const result = await db.query('SELECT * FROM `users` WHERE `email` = ?', [email]);
+        if (result.length === 0) {
+            return res.status(401).send({ errorMessage: 'Wrong Email or Password.' });
+        }
+        const user = result[0]
+        if (password === user.password) {
+            res.status(200).send(user)
+        } else {
+            res.status(401).send({ errorMessage: 'Wrong Email or Password.' });
+        }
 })
 
 app.listen(3002, () => {
