@@ -59,15 +59,16 @@ app.get('/getFormResults', async (request, response) => {
 })
 
 app.post('/register', async (req, res) => {
-    const { emailReg, passwordReg } = req.body;
-    const db = await connection;
+    const { emailReg, passwordReg } = req.body
+    const db = await connection
 
     try {
-        await db.query('INSERT INTO `users` (email, password) VALUES (?, ?)', [emailReg, passwordReg]);
-        res.status(200).send('User registered successfully');
+        await db.query('INSERT INTO `users` (email, password) VALUES (?, ?)', [emailReg, passwordReg])
+        res.status(200).json({ message: 'User registered successfully' })
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error registering user');
+        res.status(500).json({ message: 'Error registering user' })
+
     }
 });
 
