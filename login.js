@@ -31,7 +31,7 @@ const registerRoute = async (req, res) => {
         }
 
         if (!passwordValid) {
-            return res.status(401).send({ message: 'Invalid Password - requires capital letter, number, and special character', type: 'error'  });
+            return res.status(401).send({ message: 'Invalid Password - requires capital letter, number, special character and 8 or more characters.', type: 'error'  });
         }
     } else if (emailReg !== confirmEmailReg && passwordReg === confirmPasswordReg) {
         return res.status(401).send({ message: 'Email does not match', type: 'error'  });
