@@ -16,14 +16,14 @@ function isValidPassword(password) {
 }
 
 const registerRoute = async (req, res) => {
-    const { emailReg, passwordReg, confirmEmailReg, confirmPasswordReg } = req.body
+    const { emailReg, passwordReg, confirmEmailReg, confirmPasswordReg, firstName, lastName } = req.body
     const db = await connection
 
     const emailValid = isEmail(emailReg);
     const passwordValid = isValidPassword(passwordReg)
     if (emailReg === confirmEmailReg && passwordReg === confirmPasswordReg) {
         if (emailValid && passwordValid) {
-            await db.query('INSERT INTO `users` (email, password) VALUES (?, ?)', [emailReg, passwordReg]);
+            await db.query('INSERT INTO `users` (email, password, firstName, lastName) VALUES (?, ?, ?, ?)', [emailReg, passwordReg, firstName, lastName]);
             return res.status(200).send({ message: 'User registered successfully'});
         }
         if (!emailValid) {

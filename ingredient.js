@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
 
 const getRecipesRoute = async (req, res) => {
     const db = await connection
-    const recipes = await db.query('SELECT * FROM `recipes` WHERE `id` < 100')
+    const recipes = await db.query('SELECT * FROM `recipes`')
     res.json(recipes)
 }
 
@@ -36,7 +36,7 @@ const getFormResultsRoute = async (req, res) => {
             (CASE WHEN \`ingredients\` LIKE ? THEN 1 ELSE 0 END)
         ) AS ingredient_match_count
         FROM \`recipes\`
-        HAVING ingredient_match_count >= 3
+        HAVING ingredient_match_count >= 4
     `
     }
     const results = await db.query(ingredientMatch(), params)
